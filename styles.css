@@ -492,6 +492,12 @@ input:focus {
   font-weight: 800;
 }
 
+.sync-message {
+  margin: 0 0 12px;
+  color: #4b5563;
+  font-weight: 800;
+}
+
 .list-head {
   display: flex;
   align-items: start;
