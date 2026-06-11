@@ -3,7 +3,7 @@ const steps = Array.from(document.querySelectorAll(".step"));
 const storageKey = "worldcup-score-bets-v1";
 
 // Apps Script web app URL goes here after deployment.
-const API_URL = "";
+const API_URL = "https://script.google.com/macros/s/AKfycbzC2Ph6_s4IOySbeLLWI2Y-x4ZJHmzfReFYR2nrh8kpfRKAfsTXXIUsKLmPrqfzQr9Z/exec";
 
 const state = {
   step: 0,
