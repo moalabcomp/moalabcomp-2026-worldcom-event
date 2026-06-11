@@ -2,6 +2,9 @@ const screens = Array.from(document.querySelectorAll(".screen"));
 const steps = Array.from(document.querySelectorAll(".step"));
 const storageKey = "worldcup-score-bets-v1";
 
+// Apps Script web app URL goes here after deployment.
+const API_URL = "";
+
 const state = {
   step: 0,
   name: "",
@@ -23,8 +26,21 @@ const emptyState = document.querySelector("#emptyState");
 const totalCount = document.querySelector("#totalCount");
 const underCount = document.querySelector("#underCount");
 const overCount = document.querySelector("#overCount");
+const syncMessage = document.querySelector("#syncMessage");
 
-function getBets() {
+async function apiRequest(payload) {
+  if (!API_URL) return null;
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  if (!data.ok) throw new Error(data.error || "요청에 실패했습니다.");
+  return data;
+}
+
+function getLocalBets() {
   try {
     return JSON.parse(localStorage.getItem(storageKey)) || [];
   } catch {
@@ -32,7 +48,7 @@ function getBets() {
   }
 }
 
-function saveBets(bets) {
+function saveLocalBets(bets) {
   localStorage.setItem(storageKey, JSON.stringify(bets));
 }
 
@@ -99,10 +115,9 @@ function canLeaveCurrentStep() {
   return true;
 }
 
-function submitCurrentBet() {
+async function submitCurrentBet() {
   if (!validateName() || !validateScore() || !validateChoice()) return;
 
-  const bets = getBets();
   const entry = {
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     name: state.name,
@@ -110,24 +125,58 @@ function submitCurrentBet() {
     czech: state.czech,
     choice: state.choice,
     createdAt: new Date().toISOString(),
+    userAgent: navigator.userAgent,
   };
 
-  saveBets([entry, ...bets]);
-  showStep(4);
+  submitBet.disabled = true;
+  submitBet.textContent = "기록 중...";
+  try {
+    if (API_URL) {
+      await apiRequest({ action: "append", entry });
+    } else {
+      saveLocalBets([entry, ...getLocalBets()]);
+    }
+    showStep(4);
+  } catch (error) {
+    choiceMessage.textContent = `기록 실패: ${error.message}`;
+  } finally {
+    submitBet.disabled = false;
+    submitBet.textContent = "베팅 완료";
+  }
 }
 
 function formatTime(isoDate) {
+  const date = new Date(isoDate);
+  if (Number.isNaN(date.getTime())) return "-";
   return new Intl.DateTimeFormat("ko-KR", {
     month: "2-digit",
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
-  }).format(new Date(isoDate));
+  }).format(date);
 }
 
-function renderBets() {
-  const bets = getBets();
+async function loadBets() {
+  if (!API_URL) return getLocalBets();
+  const data = await apiRequest({ action: "list" });
+  return data.rows || [];
+}
+
+async function renderBets() {
+  let bets = [];
+  syncMessage.textContent = API_URL
+    ? "Google Sheet에서 최신 배팅 현황을 불러오는 중입니다."
+    : "Apps Script API URL이 연결되면 모든 참여자의 현황이 함께 표시됩니다.";
+
+  try {
+    bets = await loadBets();
+    if (API_URL) syncMessage.textContent = "Google Sheet와 동기화되었습니다.";
+  } catch (error) {
+    bets = getLocalBets();
+    syncMessage.textContent = `시트 동기화 실패: ${error.message}`;
+  }
+
   betRows.innerHTML = "";
   emptyState.classList.toggle("is-visible", bets.length === 0);
   totalCount.textContent = `${bets.length}명`;
