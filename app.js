@@ -11,6 +11,7 @@ const state = {
   korea: 0,
   czech: 0,
   choice: "",
+  duplicateNotice: "",
 };
 
 const playerName = document.querySelector("#playerName");
@@ -50,6 +51,22 @@ function getLocalBets() {
 
 function saveLocalBets(bets) {
   localStorage.setItem(storageKey, JSON.stringify(bets));
+}
+
+function normalizeName(value) {
+  return String(value || "").trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+async function findExistingBetByName(name) {
+  const normalized = normalizeName(name);
+  if (!normalized) return null;
+  const bets = await loadBets();
+  return bets.find((bet) => normalizeName(bet.name) === normalized) || null;
+}
+
+function showDuplicateNotice(name) {
+  state.duplicateNotice = `${name}님은 이미 참여했습니다. 결과 페이지만 보여드릴게요.`;
+  window.alert(state.duplicateNotice);
 }
 
 function showStep(index) {
@@ -108,8 +125,22 @@ function validateChoice() {
   return true;
 }
 
-function canLeaveCurrentStep() {
-  if (state.step === 1) return validateName();
+async function canLeaveCurrentStep() {
+  if (state.step === 1) {
+    if (!validateName()) return false;
+    try {
+      const existing = await findExistingBetByName(state.name);
+      if (existing) {
+        showDuplicateNotice(state.name);
+        showStep(4);
+        return false;
+      }
+    } catch (error) {
+      nameMessage.textContent = `참여 여부 확인 실패: ${error.message}`;
+      return false;
+    }
+    return true;
+  }
   if (state.step === 2) return validateScore();
   if (state.step === 3) return validateChoice();
   return true;
@@ -131,6 +162,13 @@ async function submitCurrentBet() {
   submitBet.disabled = true;
   submitBet.textContent = "기록 중...";
   try {
+    const existing = await findExistingBetByName(state.name);
+    if (existing) {
+      showDuplicateNotice(state.name);
+      showStep(4);
+      return;
+    }
+
     if (API_URL) {
       await apiRequest({ action: "append", entry });
     } else {
@@ -206,8 +244,13 @@ function escapeHtml(value) {
 }
 
 document.querySelectorAll("[data-next]").forEach((button) => {
-  button.addEventListener("click", () => {
-    if (canLeaveCurrentStep()) showStep(state.step + 1);
+  button.addEventListener("click", async () => {
+    button.disabled = true;
+    try {
+      if (await canLeaveCurrentStep()) showStep(state.step + 1);
+    } finally {
+      button.disabled = false;
+    }
   });
 });
 
@@ -216,9 +259,9 @@ document.querySelectorAll("[data-prev]").forEach((button) => {
 });
 
 steps.forEach((step) => {
-  step.addEventListener("click", () => {
+  step.addEventListener("click", async () => {
     const requestedStep = Number(step.dataset.jump);
-    if (requestedStep <= state.step || canLeaveCurrentStep()) {
+    if (requestedStep <= state.step || (await canLeaveCurrentStep())) {
       showStep(requestedStep);
     }
   });
