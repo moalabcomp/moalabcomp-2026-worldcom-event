@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07111f" />
+    <title>모아랩컴퍼니 2026 월드컴 이벤트</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero" aria-labelledby="event-title">
+        <div class="hero__content">
+          <p class="brand-title">모아랩컴퍼니 2026 월드컴 이벤트</p>
+          <p class="event-date">6월 12일 오전 · 월드컵 예선전</p>
+          <h1 id="event-title">대한민국 <span>VS</span> 체코</h1>
+          <div class="prize-strip" aria-label="상금 정보">
+            <div>
+              <strong>정확한 스코어</strong>
+              <b>30만원</b>
+            </div>
+            <div>
+              <strong>동시 적중 총상금</strong>
+              <b>50만원</b>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="game-panel" aria-live="polite">
+        <nav class="steps" aria-label="참여 단계">
+          <button class="step is-active" type="button" data-jump="0">
+            <span>1</span>
+            규칙
+          </button>
+          <button class="step" type="button" data-jump="1">
+            <span>2</span>
+            이름
+          </button>
+          <button class="step" type="button" data-jump="2">
+            <span>3</span>
+            스코어
+          </button>
+          <button class="step" type="button" data-jump="3">
+            <span>4</span>
+            U/O
+          </button>
+          <button class="step" type="button" data-jump="4">
+            <span>5</span>
+            현황
+          </button>
+        </nav>
+
+        <section class="screen is-visible" data-screen="rules">
+          <div class="screen-copy">
+            <p class="screen-kicker">EVENT RULES</p>
+            <h2>스코어를 맞히고<br class="mobile-break" /> 상금을 가져가세요</h2>
+          </div>
+          <div class="rule-grid">
+            <article class="rule-card">
+              <div class="rule-number">1</div>
+              <h3>스코어 맞춰라</h3>
+              <p>
+                6월 12일 오전에 있는 대한민국 VS 체코 월드컵 예선전 스코어를
+                정확히 맞히는 사람에게는 상금 30만원을 증정합니다.
+              </p>
+            </article>
+            <article class="rule-card">
+              <div class="rule-number">2</div>
+              <h3>합산 스코어 UNDER / OVER</h3>
+              <p>
+                기준점 3점을 기준으로 전체 득점의 UNDER 또는 OVER를 맞히는
+                게임입니다.
+              </p>
+              <dl>
+                <div>
+                  <dt>UNDER 적중</dt>
+                  <dd>3만원</dd>
+                </div>
+                <div>
+                  <dt>OVER 적중</dt>
+                  <dd>10만원</dd>
+                </div>
+              </dl>
+            </article>
+            <article class="rule-card rule-card--gold">
+              <div class="rule-number">★</div>
+              <h3>동시 적중 보너스</h3>
+              <p>1번 게임과 UNDER / OVER를 동시에 맞히면 총상금 50만원 지급!</p>
+            </article>
+          </div>
+          <button class="primary-action" type="button" data-next>확인</button>
+        </section>
+
+        <section class="screen" data-screen="name">
+          <div class="screen-copy">
+            <p class="screen-kicker">PLAYER CHECK-IN</p>
+            <h2>참여자 이름을 입력하세요</h2>
+          </div>
+          <label class="field">
+            <span>이름</span>
+            <input id="playerName" type="text" autocomplete="name" placeholder="예: 김민국" />
+          </label>
+          <p class="form-message" id="nameMessage"></p>
+          <div class="button-row">
+            <button class="secondary-action" type="button" data-prev>이전</button>
+            <button class="primary-action" type="button" data-next>다음</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="score">
+          <div class="screen-copy">
+            <p class="screen-kicker">SCORE PREDICTION</p>
+            <h2>대한민국 : 체코</h2>
+          </div>
+          <div class="score-board" aria-label="스코어 입력">
+            <div class="team">
+              <span class="flag flag--kr">KR</span>
+              <strong>대한민국</strong>
+              <input id="koreaScore" type="number" min="0" max="20" inputmode="numeric" value="0" />
+            </div>
+            <span class="versus">:</span>
+            <div class="team">
+              <span class="flag flag--cz">CZ</span>
+              <strong>체코</strong>
+              <input id="czechScore" type="number" min="0" max="20" inputmode="numeric" value="0" />
+            </div>
+          </div>
+          <p class="form-message" id="scoreMessage"></p>
+          <div class="button-row">
+            <button class="secondary-action" type="button" data-prev>이전</button>
+            <button class="primary-action" type="button" data-next>다음</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="total">
+          <div class="screen-copy">
+            <p class="screen-kicker">TOTAL SCORE LINE</p>
+            <h2>기준점 3점, 어디에 배팅할까요?</h2>
+          </div>
+          <div class="line-chip">기준점 <strong>3점</strong></div>
+          <div class="choice-grid">
+            <button class="choice-card" type="button" data-choice="UNDER">
+              <span class="arrow arrow--down" aria-hidden="true"></span>
+              <strong>UNDER</strong>
+              <em>합산 3점 이하</em>
+              <b>적중 시 3만원</b>
+            </button>
+            <button class="choice-card choice-card--over" type="button" data-choice="OVER">
+              <span class="arrow arrow--up" aria-hidden="true"></span>
+              <strong>OVER</strong>
+              <em>합산 4점 이상</em>
+              <b>적중 시 10만원</b>
+            </button>
+          </div>
+          <p class="form-message" id="choiceMessage"></p>
+          <div class="button-row">
+            <button class="secondary-action" type="button" data-prev>이전</button>
+            <button class="primary-action" type="button" id="submitBet">베팅 완료</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="list">
+          <div class="list-head">
+            <div class="screen-copy">
+              <p class="screen-kicker">LIVE BOARD</p>
+              <h2>현재 배팅 현황</h2>
+            </div>
+            <button class="secondary-action secondary-action--small" type="button" id="newBet">
+              새로 참여
+            </button>
+          </div>
+          <div class="summary-bar">
+            <span>총 참여 <strong id="totalCount">0명</strong></span>
+            <span>UNDER <strong id="underCount">0</strong></span>
+            <span>OVER <strong id="overCount">0</strong></span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>순위</th>
+                  <th>이름</th>
+                  <th>예상 스코어</th>
+                  <th>U/O</th>
+                  <th>참여 시간</th>
+                </tr>
+              </thead>
+              <tbody id="betRows"></tbody>
+            </table>
+          </div>
+          <p class="empty-state" id="emptyState">아직 등록된 배팅이 없습니다.</p>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
