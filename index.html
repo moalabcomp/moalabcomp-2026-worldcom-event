@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=prize-flags-2" />
   </head>
   <body>
     <main class="app-shell">
@@ -19,15 +19,35 @@
         <div class="hero__content">
           <p class="brand-title">모아랩컴퍼니 2026 월드컴 이벤트</p>
           <p class="event-date">6월 12일 오전 · 월드컵 예선전</p>
-          <h1 id="event-title">대한민국 <span>VS</span> 체코</h1>
+
+          <div class="match-line" id="event-title">
+            <div class="hero-team hero-team--kr">
+              <img src="https://flagcdn.com/w320/kr.png" alt="대한민국 국기" />
+              <strong>대한민국</strong>
+            </div>
+            <span>VS</span>
+            <div class="hero-team hero-team--cz">
+              <img src="https://flagcdn.com/w320/cz.png" alt="체코 국기" />
+              <strong>체코</strong>
+            </div>
+          </div>
+
           <div class="prize-strip" aria-label="상금 정보">
-            <div>
-              <strong>정확한 스코어</strong>
-              <b>30만원</b>
+            <div class="prize-strip__main">
+              <strong>스코어 적중 시</strong>
+              <b>30만원 💰</b>
             </div>
             <div>
-              <strong>동시 적중 총상금</strong>
-              <b>50만원</b>
+              <strong>언더 적중</strong>
+              <b>3만원 💰</b>
+            </div>
+            <div>
+              <strong>오바 적중</strong>
+              <b>10만원 💰</b>
+            </div>
+            <div class="prize-strip__max">
+              <strong>1, 2 모두 적중 시 최대 상금</strong>
+              <b>50만원 💰</b>
             </div>
           </div>
         </div>
@@ -59,42 +79,40 @@
 
         <section class="screen is-visible" data-screen="rules">
           <div class="screen-copy">
-            <p class="screen-kicker">EVENT RULES</p>
-            <h2>스코어를 맞히고<br class="mobile-break" /> 상금을 가져가세요</h2>
+            <p class="screen-kicker">EVENT PRIZE</p>
+            <h2>맞히면 바로 상금입니다</h2>
           </div>
-          <div class="rule-grid">
-            <article class="rule-card">
-              <div class="rule-number">1</div>
-              <h3>스코어 맞춰라</h3>
-              <p>
-                6월 12일 오전에 있는 대한민국 VS 체코 월드컵 예선전 스코어를
-                정확히 맞히는 사람에게는 상금 30만원을 증정합니다.
-              </p>
+
+          <div class="reward-board">
+            <article class="reward-card reward-card--score">
+              <span class="reward-number">1</span>
+              <h3>스코어 적중 시</h3>
+              <strong>30만원 💰</strong>
+              <p>대한민국 VS 체코의 정확한 최종 스코어를 맞히면 지급됩니다.</p>
             </article>
-            <article class="rule-card">
-              <div class="rule-number">2</div>
-              <h3>합산 스코어 UNDER / OVER</h3>
-              <p>
-                기준점 3점을 기준으로 전체 득점의 UNDER 또는 OVER를 맞히는
-                게임입니다.
-              </p>
-              <dl>
+            <article class="reward-card">
+              <span class="reward-number">2</span>
+              <h3>언오버 적중 시</h3>
+              <div class="reward-lines">
                 <div>
-                  <dt>UNDER 적중</dt>
-                  <dd>3만원</dd>
+                  <span>언더 적중</span>
+                  <b>3만원 💰</b>
                 </div>
                 <div>
-                  <dt>OVER 적중</dt>
-                  <dd>10만원</dd>
+                  <span>오바 적중</span>
+                  <b>10만원 💰</b>
                 </div>
-              </dl>
+              </div>
+              <p>기준점 3점을 기준으로 전체 득점의 UNDER / OVER를 선택합니다.</p>
             </article>
-            <article class="rule-card rule-card--gold">
-              <div class="rule-number">★</div>
-              <h3>동시 적중 보너스</h3>
-              <p>1번 게임과 UNDER / OVER를 동시에 맞히면 총상금 50만원 지급!</p>
+            <article class="reward-card reward-card--max">
+              <span class="reward-number">MAX</span>
+              <h3>1, 2 모두 적중 시</h3>
+              <strong>최대 50만원 💰</strong>
+              <p>정확한 스코어와 언오버를 동시에 맞히면 최대 상금에 도전합니다.</p>
             </article>
           </div>
+
           <button class="primary-action" type="button" data-next>확인</button>
         </section>
 
@@ -121,13 +139,13 @@
           </div>
           <div class="score-board" aria-label="스코어 입력">
             <div class="team">
-              <span class="flag flag--kr">KR</span>
+              <img class="flag-image" src="https://flagcdn.com/w160/kr.png" alt="대한민국 국기" />
               <strong>대한민국</strong>
               <input id="koreaScore" type="number" min="0" max="20" inputmode="numeric" value="0" />
             </div>
             <span class="versus">:</span>
             <div class="team">
-              <span class="flag flag--cz">CZ</span>
+              <img class="flag-image" src="https://flagcdn.com/w160/cz.png" alt="체코 국기" />
               <strong>체코</strong>
               <input id="czechScore" type="number" min="0" max="20" inputmode="numeric" value="0" />
             </div>
@@ -150,13 +168,13 @@
               <span class="arrow arrow--down" aria-hidden="true"></span>
               <strong>UNDER</strong>
               <em>합산 3점 이하</em>
-              <b>적중 시 3만원</b>
+              <b>적중 시 3만원 💰</b>
             </button>
             <button class="choice-card choice-card--over" type="button" data-choice="OVER">
               <span class="arrow arrow--up" aria-hidden="true"></span>
               <strong>OVER</strong>
               <em>합산 4점 이상</em>
-              <b>적중 시 10만원</b>
+              <b>적중 시 10만원 💰</b>
             </button>
           </div>
           <p class="form-message" id="choiceMessage"></p>
@@ -201,6 +219,6 @@
       </section>
     </main>
 
-    <script src="app.js?v=sheet-backend-1"></script>
+    <script src="app.js?v=duplicate-guard-1"></script>
   </body>
 </html>
